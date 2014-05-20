@@ -14,21 +14,19 @@ namespace Czopson\Authorize;
  */
 abstract class AuthorizeNetObject
 {
-    protected $api;
+    protected $apiAIM;
+    protected $apiTD;
 
     protected function __construct($loginID, $transactionKey, $sandbox = false)
     {
-        require_once('\Czopson\Authorize\anet_php_sdk\AuthorizeNet.php');
+        if($sandbox) {
+            define("AUTHORIZENET_SANDBOX", $sandbox);
+        }
 
-        define("AUTHORIZENET_API_LOGIN_ID", $loginID);
-        define("AUTHORIZENET_TRANSACTION_KEY", $transactionKey);
-        define("AUTHORIZENET_SANDBOX", $sandbox);
+        $this->apiAIM = new \AuthorizeNetAIM($loginID, $transactionKey);
+        $this->apiTD = new \AuthorizeNetTD($loginID, $transactionKey);
     }
 
-    protected function useApi($apiName)
-    {
-        $this->api = new $apiName();
-    }
 
     protected function result($result)
     {

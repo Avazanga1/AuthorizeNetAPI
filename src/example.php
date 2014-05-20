@@ -6,9 +6,11 @@
  * Time: 1:00 PM
  */
 
-function __autoload($class) {
-    require_once($class . '.php');
-}
+require_once('../vendor/autoload.php');
+
+////function __autoload($class) {
+//    require_once($class . '.php');
+//}
 
 $payment = new \Czopson\Authorize\CCPayment('6Sq9N3nvR', '42sRN493D4n5nJ5X', true);
 $ccDetails = [

@@ -17,14 +17,6 @@ class CCPayment extends AuthorizeNetObject
     private $lastTransactionResponse;
 
 
-    public function __construct($loginID, $transactionKey, $sandbox = false)
-    {
-        parent::__construct($loginID, $transactionKey, $sandbox);
-
-        $this->useApi('AuthorizeNetAIM');
-    }
-
-
     public function setTransactionDetails($details) {
         $validator = new CCDetailsValidator();
         $validator->verify($details);
@@ -89,9 +81,7 @@ class CCPayment extends AuthorizeNetObject
     }
 
     protected function getLastTransactionError() {
-        $this->useApi('AuthorizeNetTD');
-
-        $requestDetails = $this->api->getTransactionDetails($this->getLastTransationId());
+        $requestDetails = $this->apiTD->getTransactionDetails($this->getLastTransationId());
 
         if(!empty($requestDetails->xml->transaction->responseReasonDescription))
             $reason = $requestDetails->xml->transaction->responseReasonDescription;
@@ -118,37 +108,34 @@ class CCPayment extends AuthorizeNetObject
 
 
     private function authorizeTransaction($amount) {
-        $this->useApi('AuthorizeNetAIM');
+        $this->apiAIM->amount = $amount;
+        $this->apiAIM->setFields($this->transactionFields);
 
-        $this->api->amount = $amount;
-        $this->api->setFields($this->transactionFields);
-
-        $this->lastTransactionResponse = $this->api->authorizeOnly();
-        if($this->lastTransactionResponse->approved)
+        $this->lastTransactionResponse = $this->apiAIM->authorizeOnly();
+        if($this->lastTransactionResponse->approved) {
             return true;
-        else
-            return false;
+        }
+
+        return false;
     }
 
     private function voidTransaction($transactionId) {
-        $this->useApi('AuthorizeNetAIM');
+        $this->lastTransactionResponse = $this->apiAIM->void($transactionId);
 
-        $this->lastTransactionResponse = $this->api->void($transactionId);
-
-        if($this->lastTransactionResponse->approved)
+        if($this->lastTransactionResponse->approved) {
             return true;
-        else
-            return false;
+        }
+
+        return false;
     }
 
     private function captureTransaction($transactionId) {
-        $this->useApi('AuthorizeNetAIM');
+        $this->lastTransactionResponse = $this->apiAIM->priorAuthCapture($transactionId);
 
-        $this->lastTransactionResponse = $this->api->priorAuthCapture($transactionId);
-
-        if($this->lastTransactionResponse->approved)
+        if($this->lastTransactionResponse->approved) {
             return true;
-        else
-            return false;
+        }
+
+        return false;
     }
 } 

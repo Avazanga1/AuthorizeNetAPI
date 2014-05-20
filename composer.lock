@@ -3,8 +3,40 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9e32d30223f8039cc2475808a006d3cf",
+    "hash": "5402465a42bf966a12f2be8ccf868147",
     "packages": [
+        {
+            "name": "authorizenet/authorizenet",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AuthorizeNet/sdk-php.git",
+                "reference": "77ed2315c722bbb8ae82b545d4a5fa2a1ce1f4c7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AuthorizeNet/sdk-php/zipball/77ed2315c722bbb8ae82b545d4a5fa2a1ce1f4c7",
+                "reference": "77ed2315c722bbb8ae82b545d4a5fa2a1ce1f4c7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Official PHP SDK for Authorize.Net",
+            "homepage": "http://developer.authorize.net",
+            "keywords": [
+                "authorize.net",
+                "authorizenet",
+                "ecommerce",
+                "payment"
+            ],
+            "time": "2014-03-29 00:01:15"
+        }
+    ],
+    "packages-dev": [
         {
             "name": "phpspec/php-diff",
             "version": "v1.0.2",
@@ -376,9 +408,6 @@
             "time": "2014-04-18 20:37:09"
         }
     ],
-    "packages-dev": [
-
-    ],
     "aliases": [
 
     ],
@@ -386,9 +415,10 @@
     "stability-flags": {
         "phpspec/phpspec": 20
     },
-    "platform": [
-
-    ],
+    "platform": {
+        "php": ">=5.2.0",
+        "ext-curl": "*"
+    },
     "platform-dev": [
 
     ]
