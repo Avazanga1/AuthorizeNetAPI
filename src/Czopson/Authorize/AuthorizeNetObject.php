@@ -17,7 +17,7 @@ abstract class AuthorizeNetObject
     protected $apiAIM;
     protected $apiTD;
 
-    protected function __construct($loginID, $transactionKey, $sandbox = false)
+    public function __construct($loginID, $transactionKey, $sandbox = false)
     {
         if($sandbox) {
             define("AUTHORIZENET_SANDBOX", $sandbox);

@@ -10,7 +10,7 @@ namespace Czopson\Authorize;
 
 
 class CCDetailsValidator {
-    public function verify($ccDetails)
+    public function verifyAll($ccDetails)
     {
         // Verify CC number
         if(!isset($ccDetails['cc_number'])) {
@@ -96,7 +96,7 @@ class CCDetailsValidator {
         $this->verifyCCZip($ccDetails['cc_zip']);
     }
 
-    private function verifyCCNumber($number)
+    public function verifyCCNumber($number)
     {
         $number = str_replace(array('-',' '), "", $number);
         if (!preg_match('/^([0-9]{15,16})|([A-Za-z0-9\+\/\=]{172})$/',$number)) {
@@ -104,77 +104,77 @@ class CCDetailsValidator {
         }
     }
 
-    private function verifyCCCode($code)
+    public function verifyCCCode($code)
     {
         if (!preg_match('/^([0-9]{3,4})||([A-Za-z0-9\+\/\=]{172})$/', $code)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC code');
         }
     }
 
-    private function verifyCCExpMonth($exp_month)
+    public function verifyCCExpMonth($exp_month)
     {
         if (!preg_match('/^[0-9]{2}$/', $exp_month)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC expiration month');
         }
     }
 
-    private function verifyCCExpYear($exp_year)
+    public function verifyCCExpYear($exp_year)
     {
         if (!preg_match('/^[0-9]{4}$/', $exp_year)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC expiration year');
         }
     }
 
-    private function verifyCCType($type)
+    public function verifyCCType($type)
     {
         if (!preg_match('/^(Master|Visa|Amex|Discover)$/', $type)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC type');
         }
     }
 
-    private function verifyCCFirstName($firstName)
+    public function verifyCCFirstName($firstName)
     {
         if (!preg_match('/^[a-zA-Záéíóúüñ¿¡0-9\-\'\.\,\ ]+$/', $firstName)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC first name');
         }
     }
 
-    private function verifyCCLastName($lastName)
+    public function verifyCCLastName($lastName)
     {
         if (!preg_match('/^[a-zA-Záéíóúüñ¿¡0-9\-\'\.\,\ ]+$/', $lastName)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC last name');
         }
     }
 
-    private function verifyCCCity($city)
+    public function verifyCCCity($city)
     {
         if (!preg_match('/^[a-zA-ZÁÉÎÍÓÚÜÑáéíóúüñ¿¡\-\.\ ]+$/', $city)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC city');
         }
     }
 
-    private function verifyCCState($state)
+    public function verifyCCState($state)
     {
         if (!preg_match('/^[A-Z]{2}$/', $state)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC state');
         }
     }
 
-    private function verifyCCAddressLine1($addressLine1)
+    public function verifyCCAddressLine1($addressLine1)
     {
         if (!preg_match('/^[a-zA-ZÁÉÎÍÓÚÜÑáéíóúüñ¿¡0-9\-#\ \.\,\-]+$/', $addressLine1)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC address line 1');
         }
     }
 
-    private function verifyCCAddressLine2($addressLine2)
+    public function verifyCCAddressLine2($addressLine2)
     {
         if (!preg_match('/^[a-zA-ZÁÉÎÍÓÚÜÑáéíóúüñ¿¡0-9\-#\ \.\,\-]+$/', $addressLine2)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC address line 2');
         }
     }
 
-    private function verifyCCZip($zip)
+    public function verifyCCZip($zip)
     {
         if (!preg_match('/^[0-9]{5}$/', $zip)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong CC zip');

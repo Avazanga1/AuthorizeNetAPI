@@ -9,6 +9,7 @@
 namespace Czopson\Authorize;
 
 
+use Czopson\Authorize\Models\CCPaymentDetails;
 use PhpSpec\Exception\Exception;
 
 class CCPayment extends AuthorizeNetObject
@@ -17,20 +18,17 @@ class CCPayment extends AuthorizeNetObject
     private $lastTransactionResponse;
 
 
-    public function setTransactionDetails($details) {
-        $validator = new CCDetailsValidator();
-        $validator->verify($details);
-
+    public function setTransactionDetails(CCPaymentDetails $details) {
         $this->transactionFields = array(
-             'card_num'=> $details['cc_number']
-            ,'card_code'=>$details['cc_code']
-            ,'exp_date'=>$details['cc_exp_month'].'/'.$details['cc_exp_year']
-            ,'first_name' => $details['cc_name_first']
-            ,'last_name' => $details['cc_name_last']
-            ,'city' => $details['cc_city']
-            ,'state' => $details['cc_state']
-            ,'address' => $details['cc_addr1']
-            ,'zip' => $details['cc_zip']
+             'card_num'=> $details->getCcNumber()
+            ,'card_code'=>$details->getCcCode()
+            ,'exp_date'=>$details->getCcExpirationMonth().'/'.$details->getCcExpirationYear()
+            ,'first_name' => $details->getFirstName()
+            ,'last_name' => $details->getLastName()
+            ,'city' => $details->getCity()
+            ,'state' => $details->getState()
+            ,'address' => $details->getAddressLine1().' '.$details->getAddressLine2()
+            ,'zip' => $details->getZip()
         );
     }
 

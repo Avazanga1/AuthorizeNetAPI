@@ -6,27 +6,22 @@
  * Time: 1:00 PM
  */
 
+require_once('../vendor/authorizenet/authorizenet/AuthorizeNet.php');
 require_once('../vendor/autoload.php');
 
-////function __autoload($class) {
-//    require_once($class . '.php');
-//}
 
 $payment = new \Czopson\Authorize\CCPayment('6Sq9N3nvR', '42sRN493D4n5nJ5X', true);
-$ccDetails = [
-    'cc_number' => '5424000000000015',
-    'cc_code' => '123',
-    'cc_exp_month' => '10',
-    'cc_exp_year' => '2018',
-    'cc_type' => 'Master',
-    'cc_name_first' => 'Artur',
-    'cc_name_last' => 'Czopek',
-    'cc_city' => 'Krakow',
-    'cc_state' => 'FL',
-    'cc_addr1' => 'Ul. Krakusa 13',
-    'cc_addr2' => 'Apt 666',
-    'cc_zip' => '12345'
-];
-$payment->setTransactionDetails($ccDetails);
+
+$paymentDetails = new \Czopson\Authorize\Models\CCPaymentDetails('Artur', 'Czopek', '5424000000000015');
+$paymentDetails->setCcCode('123');
+$paymentDetails->setCcType('Master');
+$paymentDetails->setCcExpirationMonth('05');
+$paymentDetails->setCcExpirationYear('2016');
+$paymentDetails->setCity('Krakow');
+$paymentDetails->setState('FL');
+$paymentDetails->setZip('12345');
+$paymentDetails->setAddressLine1('Ul. Krakusa Pierwszego 123');
+
+$payment->setTransactionDetails($paymentDetails);
 $charge = $payment->validateCC ('10');
 var_dump($charge);
