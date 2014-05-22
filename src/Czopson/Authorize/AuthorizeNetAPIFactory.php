@@ -9,6 +9,8 @@
 namespace Czopson\Authorize;
 
 
-class AuthorizeNetAPIFactory {
-
+interface AuthorizeNetAPIFactory {
+    public function getAIM($loginID, $transactionKey);
+    public function getCIM($loginID, $transactionKey);
+    public function getTD($loginID, $transactionKey);
 } 

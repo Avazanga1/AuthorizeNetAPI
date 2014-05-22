@@ -135,49 +135,56 @@ class CCDetailsValidator {
     public function verifyCCFirstName($firstName)
     {
         if (!preg_match('/^[a-zA-Záéíóúüñ¿¡0-9\-\'\.\,\ ]+$/', $firstName)) {
-            throw new Exceptions\IncorrectCCDetailsException('Wrong CC first name');
+            throw new Exceptions\IncorrectCCDetailsException('Wrong first name');
         }
     }
 
     public function verifyCCLastName($lastName)
     {
         if (!preg_match('/^[a-zA-Záéíóúüñ¿¡0-9\-\'\.\,\ ]+$/', $lastName)) {
-            throw new Exceptions\IncorrectCCDetailsException('Wrong CC last name');
+            throw new Exceptions\IncorrectCCDetailsException('Wrong last name');
         }
     }
 
     public function verifyCCCity($city)
     {
         if (!preg_match('/^[a-zA-ZÁÉÎÍÓÚÜÑáéíóúüñ¿¡\-\.\ ]+$/', $city)) {
-            throw new Exceptions\IncorrectCCDetailsException('Wrong CC city');
+            throw new Exceptions\IncorrectCCDetailsException('Wrong city');
         }
     }
 
     public function verifyCCState($state)
     {
         if (!preg_match('/^[A-Z]{2}$/', $state)) {
-            throw new Exceptions\IncorrectCCDetailsException('Wrong CC state');
+            throw new Exceptions\IncorrectCCDetailsException('Wrong state');
         }
     }
 
     public function verifyCCAddressLine1($addressLine1)
     {
         if (!preg_match('/^[a-zA-ZÁÉÎÍÓÚÜÑáéíóúüñ¿¡0-9\-#\ \.\,\-]+$/', $addressLine1)) {
-            throw new Exceptions\IncorrectCCDetailsException('Wrong CC address line 1');
+            throw new Exceptions\IncorrectCCDetailsException('Wrong address line 1');
         }
     }
 
     public function verifyCCAddressLine2($addressLine2)
     {
         if (!preg_match('/^[a-zA-ZÁÉÎÍÓÚÜÑáéíóúüñ¿¡0-9\-#\ \.\,\-]+$/', $addressLine2)) {
-            throw new Exceptions\IncorrectCCDetailsException('Wrong CC address line 2');
+            throw new Exceptions\IncorrectCCDetailsException('Wrong address line 2');
         }
     }
 
     public function verifyCCZip($zip)
     {
         if (!preg_match('/^[0-9]{5}$/', $zip)) {
-            throw new Exceptions\IncorrectCCDetailsException('Wrong CC zip');
+            throw new Exceptions\IncorrectCCDetailsException('Wrong zip');
+        }
+    }
+
+    public function verifyCCCompanyName($companyName)
+    {
+        if (!preg_match('/^[a-zA-Záéíóúüñ¿¡0-9\-\'\.\,\ ]+$/', $companyName)) {
+            throw new Exceptions\IncorrectCCDetailsException('Wrong company name');
         }
     }
 } 

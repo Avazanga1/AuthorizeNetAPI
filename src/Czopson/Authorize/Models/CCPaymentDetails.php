@@ -27,6 +27,7 @@ class CCPaymentDetails {
     private $zip = '';
     private $addressLine1 = '';
     private $addressLine2 = '';
+    private $companyName = '';
 
     public function __construct($firsName, $lastName, $ccNumber) {
         $this->validator = new CCDetailsValidator();
@@ -253,4 +254,20 @@ class CCPaymentDetails {
         return $this->zip;
     }
 
+    /**
+     * @param mixed $companyName
+     */
+    public function setCompanyName($companyName)
+    {
+        $this->validator->verifyCCCompanyName($companyName);
+        $this->companyName = $companyName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
+    }
 } 

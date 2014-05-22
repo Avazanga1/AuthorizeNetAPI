@@ -16,15 +16,21 @@ abstract class AuthorizeNetObject
 {
     protected $apiAIM;
     protected $apiTD;
+    protected $apiCIM;
 
-    public function __construct($loginID, $transactionKey, $sandbox = false)
+    public function __construct($loginID, $transactionKey, $sandbox = false, AuthorizeNetAPIFactory $apiFactory = null)
     {
-        if($sandbox) {
+        if($sandbox && !defined('AUTHORIZENET_SANDBOX')) {
             define("AUTHORIZENET_SANDBOX", $sandbox);
         }
 
-        $this->apiAIM = new \AuthorizeNetAIM($loginID, $transactionKey);
-        $this->apiTD = new \AuthorizeNetTD($loginID, $transactionKey);
+        if (!$apiFactory) {
+            $apiFactory = new AuthorizeNetAPIProductionFactory();
+        }
+
+        $this->apiAIM = $apiFactory->getAIM($loginID, $transactionKey);
+        $this->apiTD = $apiFactory->getTD($loginID, $transactionKey);
+        $this->apiCIM = $apiFactory->getCIM($loginID, $transactionKey);
     }
 
 
