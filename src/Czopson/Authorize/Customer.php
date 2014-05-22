@@ -11,20 +11,23 @@ class Customer extends AuthorizeNetObject
 
     const INDIVIDUAL_CC_PROFILE = 'individual';
 
-    public function createCustomer($name, $email)
+    public function createFullProfile(CCPaymentDetails $details)
+    {
+        $customerProfile = $this->createCustomerProfile($details);
+        $this->createCCPaymentProfile($customerProfile, $details);
+        $this->createAddressProfile($customerProfile, $details);
+
+        return $this->save($customerProfile);
+    }
+
+    public function createCustomerProfile(CCPaymentDetails $details)
     {
         $customerProfile = new \AuthorizeNetCustomer;
-        $customerProfile->description = $name;
+        $customerProfile->description = $details->getFirstName() .' '. $details->getLastName();
         $customerProfile->merchantCustomerId = time().rand(1,10);
-        $customerProfile->email = $email;
+        $customerProfile->email = $details->getEmail();
 
-        $this->lastTransactionResponse = $this->apiCIM->createCustomerProfile($customerProfile);
-        if($this->lastTransactionResponse->isOk()) {
-            $this->id = $this->lastTransactionResponse->getCustomerProfileId();
-            return $this->result(true);
-        }
-
-        return $this->result(false);
+        return $customerProfile;
     }
 
     public function createCCPaymentProfile(\AuthorizeNetCustomer $customerProfile, CCPaymentDetails $details)
@@ -38,18 +41,26 @@ class Customer extends AuthorizeNetObject
 
     public function createAddressProfile(\AuthorizeNetCustomer $customerProfile, CCPaymentDetails $details)
     {
-        $address = new AuthorizeNetAddress;
+        $address = new \AuthorizeNetAddress;
         $address->firstName = $details->getFirstName();
         $address->lastName = $details->getLastName();
         $address->company = $details->getCompanyName();
         $address->address = $details->getAddressLine1() .' '. $details->getAddressLine2();
-        $address->city = "Boston";
-        $address->state = "MA";
-        $address->zip = "02412";
-        $address->country = "USA";
-        $address->phoneNumber = "555-555-5555";
-        $address->faxNumber = "555-555-5556";
+        $address->city = $details->getCity();
+        $address->state = $details->getState();
+        $address->zip = $details->getZip();
         $customerProfile->shipToList[] = $address;
+    }
+
+    public function save(\AuthorizeNetCustomer $customerProfile)
+    {
+        $this->lastTransactionResponse = $this->apiCIM->createCustomerProfile($customerProfile);
+        if($this->lastTransactionResponse->isOk()) {
+            $this->id = $this->lastTransactionResponse->getCustomerProfileId();
+            return $this->result(true);
+        }
+
+        return $this->result(false);
     }
 
     public function getId()

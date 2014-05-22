@@ -29,10 +29,10 @@ class CCPaymentDetails {
     private $addressLine2 = '';
     private $companyName = '';
 
-    public function __construct($firsName, $lastName, $ccNumber) {
+    public function __construct($firstName, $lastName, $ccNumber) {
         $this->validator = new CCDetailsValidator();
 
-        if(empty($firsName)) {
+        if(empty($firstName)) {
             throw new MissingCCDetailsException('Missing CC first name');
         }
         if(empty($lastName)) {
@@ -42,8 +42,8 @@ class CCPaymentDetails {
             throw new MissingCCDetailsException('Missing CC number');
         }
 
-        $this->validator->verifyCCFirstName($firsName);
-        $this->firsName = $firsName;
+        $this->validator->verifyCCFirstName($firstName);
+        $this->firstName = $firstName;
         $this->validator->verifyCCLastName($lastName);
         $this->lastName = $lastName;
         $this->validator->verifyCCNumber($ccNumber);
@@ -269,5 +269,22 @@ class CCPaymentDetails {
     public function getCompanyName()
     {
         return $this->companyName;
+    }
+
+    /**
+     * @param mixed $companyName
+     */
+    public function setEmail($email)
+    {
+        $this->validator->verifyEmail($email);
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 } 

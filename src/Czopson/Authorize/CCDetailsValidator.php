@@ -187,4 +187,11 @@ class CCDetailsValidator {
             throw new Exceptions\IncorrectCCDetailsException('Wrong company name');
         }
     }
+
+    public function verifyEmail($email)
+    {
+        if (!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/', $email)) {
+            throw new Exceptions\IncorrectCCDetailsException('Wrong email address');
+        }
+    }
 } 
