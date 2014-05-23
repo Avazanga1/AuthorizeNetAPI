@@ -30,4 +30,10 @@ $paymentDetails->setEmail('artur.czopek@avalton.com');
 // Customer creation in Authorize.NET
 $customer = new \Czopson\Authorize\Customer('6Sq9N3nvR', '42sRN493D4n5nJ5X', true);
 $res = $customer->createFullProfile($paymentDetails);
-var_dump($res);
+
+$customerPayment = new \Czopson\Authorize\CustomerPayment('6Sq9N3nvR', '42sRN493D4n5nJ5X', $res->id, true);
+var_dump($customerPayment->chargeCC(5));
+var_dump($customerPayment->validateCC(1));
+
+// Customer removal
+//var_dump($customer->deleteProfile(26895328));

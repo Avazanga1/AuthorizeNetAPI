@@ -6,10 +6,14 @@ use Czopson\Authorize\Models\CCPaymentDetails;
 
 class Customer extends AuthorizeNetObject
 {
-    private $id;
     private $lastTransactionResponse;
 
+    private $customerProfileID;
+    private $paymentProfileID;
+    private $addressProfileID;
+
     const INDIVIDUAL_CC_PROFILE = 'individual';
+    const BUSINESS_CC_PROFILE = 'business';
 
     public function createFullProfile(CCPaymentDetails $details)
     {
@@ -55,23 +59,35 @@ class Customer extends AuthorizeNetObject
     public function save(\AuthorizeNetCustomer $customerProfile)
     {
         $this->lastTransactionResponse = $this->apiCIM->createCustomerProfile($customerProfile);
-        if($this->lastTransactionResponse->isOk()) {
-            $this->id = $this->lastTransactionResponse->getCustomerProfileId();
+        if($this->lastTransactionResponse->isOk())
+        {
+            $this->setCustomerProfileID($this->lastTransactionResponse->getCustomerProfileId());
+            $this->setPaymentProfileID($this->lastTransactionResponse->getPaymentProfileId());
+            $this->setAddressProfileID($this->lastTransactionResponse->getCustomerAddressId());
+
             return $this->result(true);
         }
 
         return $this->result(false);
     }
 
-    public function getId()
+    public function deleteProfile($customerId)
     {
-        return $this->id;
+        return $this->apiCIM->deleteCustomerProfile($customerId);
     }
 
+    public function loadById($customerId)
+    {
+        $customerProfile = $this->apiCIM->getCustomerProfile($customerId);
+
+        $this->setCustomerProfileID($customerProfile->getCustomerProfileId());
+        $this->setPaymentProfileID($customerProfile->getPaymentProfileId());
+        $this->setAddressProfileID($customerProfile->getCustomerAddressId());
+    }
 
     protected function getLastTransationId()
     {
-        return $this->getId();
+        return $this->lastTransactionResponse->getCustomerProfileId();
     }
 
     protected function getLastTransactionError()
@@ -79,8 +95,53 @@ class Customer extends AuthorizeNetObject
         return '';
     }
 
-    public function createPaymentProfile($type, $cardNumber, $expirationDate)
+    /**
+     * @param mixed $addressProfileID
+     */
+    public function setAddressProfileID($addressProfileID)
     {
-
+        $this->addressProfileID = $addressProfileID;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressProfileID()
+    {
+        return $this->addressProfileID;
+    }
+
+    /**
+     * @param mixed $customerProfileID
+     */
+    public function setCustomerProfileID($customerProfileID)
+    {
+        $this->customerProfileID = $customerProfileID;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerProfileID()
+    {
+        return $this->customerProfileID;
+    }
+
+    /**
+     * @param mixed $paymentProfileID
+     */
+    public function setPaymentProfileID($paymentProfileID)
+    {
+        $this->paymentProfileID = $paymentProfileID;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPaymentProfileID()
+    {
+        return $this->paymentProfileID;
+    }
+
+
 }
