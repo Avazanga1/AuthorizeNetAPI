@@ -9,7 +9,7 @@
 namespace Czopson\Authorize;
 
 
-class CustomerPayment extends AuthorizeNetObject
+class CustomerPayment extends ANetPayment
 {
     private $customer;
 
@@ -24,25 +24,25 @@ class CustomerPayment extends AuthorizeNetObject
     public function validateCC($amount)
     {
         $transactionId = $this->authorize($amount);
-        return $this->result($this->void($transactionId));
+        return $this->transactionResult($this->void($transactionId));
     }
 
     public function chargeCC($amount)
     {
         $transaction = $this->prepareTransaction($amount);
         $response = $this->apiCIM->createCustomerProfileTransaction("AuthCapture", $transaction);
-        $transactionResponse = $response->getTransactionResponse();
+        $this->setLastTransactionResponse($response->getTransactionResponse());
 
-        return $this->result($transactionResponse->transaction_id);
+        return $this->transactionResult($response->isOk());
     }
 
     private function authorize($amount)
     {
         $transaction = $this->prepareTransaction($amount);
         $response = $this->apiCIM->createCustomerProfileTransaction("AuthOnly", $transaction);
-        $transactionResponse = $response->getTransactionResponse();
+        $this->setLastTransactionResponse($response->getTransactionResponse());
 
-        return $transactionResponse->transaction_id;
+        return $this->getLastTransactionResponse()->transaction_id;
     }
 
     private function void($transactionId)
@@ -50,6 +50,7 @@ class CustomerPayment extends AuthorizeNetObject
         $transaction = new \AuthorizeNetTransaction;
         $transaction->transId = $transactionId;
         $response = $this->apiCIM->createCustomerProfileTransaction("Void", $transaction);
+        $this->setLastTransactionResponse($response->getTransactionResponse());
 
         return $response->isOk();
     }
@@ -69,15 +70,5 @@ class CustomerPayment extends AuthorizeNetObject
     {
         return $this->apiCIM->getCustomerProfile($customerId);
 
-    }
-
-    protected function getLastTransationId()
-    {
-        // TODO: Implement getLastTransationId() method.
-    }
-
-    protected function getLastTransactionError()
-    {
-        // TODO: Implement getLastTransactionError() method.
     }
 }

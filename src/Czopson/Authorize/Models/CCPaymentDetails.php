@@ -9,7 +9,7 @@
 namespace Czopson\Authorize\Models;
 
 
-use Czopson\Authorize\CCDetailsValidator;
+use Czopson\Authorize\ValidatorCCDetails;
 use Czopson\Authorize\Exceptions\MissingCCDetailsException;
 
 class CCPaymentDetails {
@@ -30,7 +30,7 @@ class CCPaymentDetails {
     private $companyName = '';
 
     public function __construct($firstName, $lastName, $ccNumber) {
-        $this->validator = new CCDetailsValidator();
+        $this->validator = new ValidatorCCDetails();
 
         if(empty($firstName)) {
             throw new MissingCCDetailsException('Missing CC first name');

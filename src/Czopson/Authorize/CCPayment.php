@@ -10,13 +10,10 @@ namespace Czopson\Authorize;
 
 
 use Czopson\Authorize\Models\CCPaymentDetails;
-use PhpSpec\Exception\Exception;
 
-class CCPayment extends AuthorizeNetObject
+class CCPayment extends ANetPayment
 {
     private $transactionFields;
-    private $lastTransactionResponse;
-
 
     public function setTransactionDetails(CCPaymentDetails $details) {
         $this->transactionFields = array(
@@ -39,12 +36,12 @@ class CCPayment extends AuthorizeNetObject
         }
 
         if($this->authorizeTransaction($amount)) {
-            $res = $this->voidTransaction($this->lastTransactionResponse->transaction_id);
+            $res = $this->voidTransaction($this->getLastTransactionResponse()->transaction_id);
         } else {
             $res = false;
         }
 
-        return $this->result($res);
+        return $this->transactionResult($res);
     }
 
 
@@ -54,54 +51,12 @@ class CCPayment extends AuthorizeNetObject
         }
 
         if($this->authorizeTransaction($amount)) {
-            $res = $this->captureTransaction($this->lastTransactionResponse->transaction_id);
+            $res = $this->captureTransaction($this->getLastTransactionResponse()->transaction_id);
         } else {
             $res = false;
         }
 
-        return $this->result($res);
-    }
-
-    public function getLastTransactionResponse() {
-        if(!isset($this->lastTransactionResponse)) {
-            throw new Exception('Unable to retrieve last transaction response');
-        }
-
-        return $this->lastTransactionResponse;
-    }
-
-    protected function getLastTransationId() {
-        if(!isset($this->lastTransactionResponse->transaction_id)) {
-            throw new Exception('Unable to retrieve ID of last transaction');
-        }
-
-        return $this->lastTransactionResponse->transaction_id;
-    }
-
-    protected function getLastTransactionError() {
-        $requestDetails = $this->apiTD->getTransactionDetails($this->getLastTransationId());
-
-        if(!empty($requestDetails->xml->transaction->responseReasonDescription))
-            $reason = $requestDetails->xml->transaction->responseReasonDescription;
-        else
-            $reason = $this->getLastTransactionResponse()->response_reason_text;
-
-        if ($reason == 'Card declined by issuer - Contact card issuer to determine reason.')
-            $reason = 'CC declined by card issuer.';
-        if ($reason == 'Card reported lost or stolen - Contact card issuer for resolution.')
-            $reason = 'CC reported lost or stolen.';
-        if ($reason == 'Authorization with the card issuer was successful but the transaction was declined due to an address or ZIP code mismatch with the address on file with the card issuing bank based on the settings in the Merchant Interface.')
-            $reason = 'ZIP code mismatch with CC address.';
-        if ($reason == 'Processor error - Invalid Credit Card Number.  Call merchant service provider for resolution.')
-            $reason = 'Invalid CC number.';
-        if ($reason == 'The credit card number is invalid.')
-            $reason = 'Invalid CC number.';
-        if ($reason == 'Processor Error - Invalid Credit Card Expiration Date')
-            $reason = 'Invalid CC expiration date';
-        if ($reason == 'The credit card has expired.')
-            $reason = 'CC is expired';
-
-        return $reason;
+        return $this->transactionResult($res);
     }
 
 
@@ -109,8 +64,9 @@ class CCPayment extends AuthorizeNetObject
         $this->apiAIM->amount = $amount;
         $this->apiAIM->setFields($this->transactionFields);
 
-        $this->lastTransactionResponse = $this->apiAIM->authorizeOnly();
-        if($this->lastTransactionResponse->approved) {
+        $response = $this->apiAIM->authorizeOnly();
+        $this->setLastTransactionResponse($response);
+        if($this->getLastTransactionResponse()->approved) {
             return true;
         }
 
@@ -118,9 +74,10 @@ class CCPayment extends AuthorizeNetObject
     }
 
     private function voidTransaction($transactionId) {
-        $this->lastTransactionResponse = $this->apiAIM->void($transactionId);
+        $response = $this->apiAIM->void($transactionId);
+        $this->setLastTransactionResponse($response);
 
-        if($this->lastTransactionResponse->approved) {
+        if($this->getLastTransactionResponse()->approved) {
             return true;
         }
 
@@ -128,9 +85,10 @@ class CCPayment extends AuthorizeNetObject
     }
 
     private function captureTransaction($transactionId) {
-        $this->lastTransactionResponse = $this->apiAIM->priorAuthCapture($transactionId);
+        $response = $this->apiAIM->priorAuthCapture($transactionId);
+        $this->setLastTransactionResponse($response);
 
-        if($this->lastTransactionResponse->approved) {
+        if($this->getLastTransactionResponse()->approved) {
             return true;
         }
 

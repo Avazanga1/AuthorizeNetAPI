@@ -9,7 +9,7 @@
 namespace Czopson\Authorize;
 
 
-class CCDetailsValidator {
+class ValidatorCCDetails {
     public function verifyAll($ccDetails)
     {
         // Verify CC number

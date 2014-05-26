@@ -3,11 +3,10 @@
 namespace Czopson\Authorize;
 
 use Czopson\Authorize\Models\CCPaymentDetails;
+use PhpSpec\Exception\Exception;
 
-class Customer extends AuthorizeNetObject
+class Customer extends ANetObject
 {
-    private $lastTransactionResponse;
-
     private $customerProfileID;
     private $paymentProfileID;
     private $addressProfileID;
@@ -21,7 +20,9 @@ class Customer extends AuthorizeNetObject
         $this->createCCPaymentProfile($customerProfile, $details);
         $this->createAddressProfile($customerProfile, $details);
 
-        return $this->save($customerProfile);
+        $this->save($customerProfile);
+
+        return true;
     }
 
     public function createCustomerProfile(CCPaymentDetails $details)
@@ -58,22 +59,26 @@ class Customer extends AuthorizeNetObject
 
     public function save(\AuthorizeNetCustomer $customerProfile)
     {
-        $this->lastTransactionResponse = $this->apiCIM->createCustomerProfile($customerProfile);
-        if($this->lastTransactionResponse->isOk())
+        $response = $this->apiCIM->createCustomerProfile($customerProfile);
+        if($response->isOk())
         {
-            $this->setCustomerProfileID($this->lastTransactionResponse->getCustomerProfileId());
-            $this->setPaymentProfileID($this->lastTransactionResponse->getPaymentProfileId());
-            $this->setAddressProfileID($this->lastTransactionResponse->getCustomerAddressId());
-
-            return $this->result(true);
+            $this->setCustomerProfileID($response->getCustomerProfileId());
+            $this->setPaymentProfileID($response->getPaymentProfileId());
+            $this->setAddressProfileID($response->getCustomerAddressId());
+        } else {
+            throw new Exception('Unable to create customer profile in Authorize.NET.');
         }
-
-        return $this->result(false);
     }
 
     public function deleteProfile($customerId)
     {
-        return $this->apiCIM->deleteCustomerProfile($customerId);
+        $response = $this->apiCIM->deleteCustomerProfile($customerId);
+
+        if($response->isOk()) {
+            return true;
+        } else {
+            throw new Exception('Unable to remove customer profile in Authorize.NET.');
+        }
     }
 
     public function loadById($customerId)
@@ -85,15 +90,6 @@ class Customer extends AuthorizeNetObject
         $this->setAddressProfileID($customerProfile->getCustomerAddressId());
     }
 
-    protected function getLastTransationId()
-    {
-        return $this->lastTransactionResponse->getCustomerProfileId();
-    }
-
-    protected function getLastTransactionError()
-    {
-        return '';
-    }
 
     /**
      * @param mixed $addressProfileID

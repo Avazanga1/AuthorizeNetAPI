@@ -9,7 +9,7 @@
 namespace Czopson\Authorize;
 
 
-class AuthorizeNetAPIProductionFactory implements AuthorizeNetAPIFactory {
+class ANetAPIProductionFactory implements ANetAPIFactory {
 
     public function getAIM($loginID, $transactionKey)
     {

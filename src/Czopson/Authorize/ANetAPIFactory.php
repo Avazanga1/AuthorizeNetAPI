@@ -9,7 +9,7 @@
 namespace Czopson\Authorize;
 
 
-interface AuthorizeNetAPIFactory {
+interface ANetAPIFactory {
     public function getAIM($loginID, $transactionKey);
     public function getCIM($loginID, $transactionKey);
     public function getTD($loginID, $transactionKey);
