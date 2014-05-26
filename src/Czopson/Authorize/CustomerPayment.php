@@ -23,8 +23,8 @@ class CustomerPayment extends AuthorizeNetObject
 
     public function validateCC($amount)
     {
-        $this->chargeCC($amount);
-        return $this->result($this->void($amount));
+        $transactionId = $this->authorize($amount);
+        return $this->result($this->void($transactionId));
     }
 
     public function chargeCC($amount)
@@ -36,12 +36,22 @@ class CustomerPayment extends AuthorizeNetObject
         return $this->result($transactionResponse->transaction_id);
     }
 
-    public function void($transactionId)
+    private function authorize($amount)
+    {
+        $transaction = $this->prepareTransaction($amount);
+        $response = $this->apiCIM->createCustomerProfileTransaction("AuthOnly", $transaction);
+        $transactionResponse = $response->getTransactionResponse();
+
+        return $transactionResponse->transaction_id;
+    }
+
+    private function void($transactionId)
     {
         $transaction = new \AuthorizeNetTransaction;
         $transaction->transId = $transactionId;
         $response = $this->apiCIM->createCustomerProfileTransaction("Void", $transaction);
 
+        return $response->isOk();
     }
 
     private function prepareTransaction($amount)
