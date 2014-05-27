@@ -7,6 +7,8 @@ use Czopson\Authorize\Models\CCPaymentDetails;
 
 class CCPayment extends ANetPayment
 {
+    private $paymentDetails;
+
     public function __construct($loginID, $transactionKey, CCPaymentDetails $details, $sandbox = false, ANetAPIFactory $apiFactory = null)
     {
         parent::__construct($loginID, $transactionKey, $sandbox, $apiFactory);
@@ -15,17 +17,7 @@ class CCPayment extends ANetPayment
             throw new \Exception('Missing CC details.');
         }
 
-        $this->transactionFields = array(
-            'card_num'=> $details->getCcNumber()
-            ,'card_code'=>$details->getCcCode()
-            ,'exp_date'=>$details->getCcExpirationMonth().'/'.$details->getCcExpirationYear()
-            ,'first_name' => $details->getFirstName()
-            ,'last_name' => $details->getLastName()
-            ,'city' => $details->getCity()
-            ,'state' => $details->getState()
-            ,'address' => $details->getAddressLine1().' '.$details->getAddressLine2()
-            ,'zip' => $details->getZip()
-        );
+        $this->paymentDetails = $details;
     }
 
     public function validateCC($amount) {
@@ -51,7 +43,7 @@ class CCPayment extends ANetPayment
 
     private function authorizeTransaction($amount) {
         $this->apiAIM->amount = $amount;
-        $this->apiAIM->setFields($this->transactionFields);
+        $this->apiAIM->setFields($this->paymentDetails->toArray());
 
         $response = $this->apiAIM->authorizeOnly();
         $this->setLastTransactionResponse($response);

@@ -3,24 +3,30 @@
 namespace Czopson\Authorize;
 
 
+use Czopson\Authorize\Responses\TransactionInvalidResponse;
+use Czopson\Authorize\Responses\TransactionResponse;
+
 class ANetPayment extends ANetObject {
     private $lastTransactionResponse;
 
+    private $reasonMap = [
+        'Card declined by issuer - Contact card issuer to determine reason.'    =>  'CC declined by card issuer.',
+        'Card reported lost or stolen - Contact card issuer for resolution.'    =>  'CC reported lost or stolen.',
+        'Authorization with the card issuer was successful but the transaction was declined due to an address or ZIP code mismatch with the address on file with the card issuing bank based on the settings in the Merchant Interface.'    => 'ZIP code mismatch with CC address.',
+        'Processor error - Invalid Credit Card Number.  Call merchant service provider for resolution.' =>  'Invalid CC number.',
+        'The credit card number is invalid.'    =>  'Invalid CC number.',
+        'Processor Error - Invalid Credit Card Expiration Date' =>  'Invalid CC expiration date',
+        'The credit card has expired.'  =>  'CC is expired'
+    ];
+
     protected function transactionResult($result)
     {
-        if(true === $result) {
-            return (object) [
-                'success' => true,
-                'result' => 'Transaction successful',
-                'id' => $this->getLastTransactionId(),
-            ];
-        } else {
-            return (object) [
-                'success' => false,
-                'result' => $this->getLastTransactionError(),
-                'id' => $this->getLastTransactionId(),
-            ];
+        $isValidResult = (bool) $result;
+        if ($isValidResult) {
+            return new TransactionResponse('Transaction successful', $this->getLastTransactionId());
         }
+
+        return new TransactionInvalidResponse($this->getLastTransactionError(), $this->getLastTransactionId());
     }
 
     protected function setLastTransactionResponse(\AuthorizeNetResponse $response) {
@@ -51,20 +57,9 @@ class ANetPayment extends ANetObject {
         else
             $reason = $this->getLastTransactionResponse()->response_reason_text;
 
-        if ($reason == 'Card declined by issuer - Contact card issuer to determine reason.')
-            $reason = 'CC declined by card issuer.';
-        if ($reason == 'Card reported lost or stolen - Contact card issuer for resolution.')
-            $reason = 'CC reported lost or stolen.';
-        if ($reason == 'Authorization with the card issuer was successful but the transaction was declined due to an address or ZIP code mismatch with the address on file with the card issuing bank based on the settings in the Merchant Interface.')
-            $reason = 'ZIP code mismatch with CC address.';
-        if ($reason == 'Processor error - Invalid Credit Card Number.  Call merchant service provider for resolution.')
-            $reason = 'Invalid CC number.';
-        if ($reason == 'The credit card number is invalid.')
-            $reason = 'Invalid CC number.';
-        if ($reason == 'Processor Error - Invalid Credit Card Expiration Date')
-            $reason = 'Invalid CC expiration date';
-        if ($reason == 'The credit card has expired.')
-            $reason = 'CC is expired';
+        if(isset($this->reasonMap[$reason])) {
+            return $this->reasonMap[$reason];
+        }
 
         return $reason;
     }

@@ -50,6 +50,21 @@ class CCPaymentDetails {
         $this->ccNumber = $ccNumber;
     }
 
+    public function toArray()
+    {
+        return array(
+            'card_num'=> $this->getCcNumber()
+            ,'card_code'=>$this->getCcCode()
+            ,'exp_date'=>$this->getCcExpirationMonth().'/'.$this->getCcExpirationYear()
+            ,'first_name' => $this->getFirstName()
+            ,'last_name' => $this->getLastName()
+            ,'city' => $this->getCity()
+            ,'state' => $this->getState()
+            ,'address' => $this->getAddressLine1().' '.$this->getAddressLine2()
+            ,'zip' => $this->getZip()
+        );
+    }
+
     /**
      * @param mixed $addressLine1
      */
