@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Artur Czopek (artur.czopek@avalton.com)
- * Date: 5/26/14
- * Time: 3:03 PM
- */
 
 namespace Czopson\Authorize;
 
@@ -30,10 +24,6 @@ class ANetPayment extends ANetObject {
     }
 
     protected function setLastTransactionResponse(\AuthorizeNetResponse $response) {
-        if(null === $response) {
-            throw new \Exception('Unable to save last transaction response');
-        }
-
         $this->lastTransactionResponse = $response;
     }
 

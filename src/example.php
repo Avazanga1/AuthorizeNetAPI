@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Artur Czopek
- * Date: 5/19/14
- * Time: 1:00 PM
- */
 
 ini_set('display_errors', true);
 error_reporting(E_ALL);
@@ -28,8 +22,7 @@ $paymentDetails->setEmail('artur.czopek@avalton.com');
 
 
 //##### Standard CC payment
-$payment = new \Czopson\Authorize\CCPayment('6Sq9N3nvR', '42sRN493D4n5nJ5X', true);
-$payment->setTransactionDetails($paymentDetails);
+$payment = new \Czopson\Authorize\CCPayment('6Sq9N3nvR', '42sRN493D4n5nJ5X', $paymentDetails, true);
 
 // charge CC for 10 dollars
 $transaction = $payment->chargeCC('10');
@@ -52,10 +45,12 @@ if(true === $transaction->success) {
 
 //##### Customer creation and CC payment
 // initialize customer creation
-$customer = new \Czopson\Authorize\Customer('6Sq9N3nvR', '42sRN493D4n5nJ5X', true);
+$customer = new \Czopson\Authorize\CustomerManager('6Sq9N3nvR', '42sRN493D4n5nJ5X', true);
 
 // create customer in Authorize.NET
-if(true != $customer->createFullProfile($paymentDetails)) {
+try{
+    $customer->createFullProfile($paymentDetails);
+} catch (Exception $e) {
     echo 'Unable to create customer in Authorize.NET';
     exit;
 }

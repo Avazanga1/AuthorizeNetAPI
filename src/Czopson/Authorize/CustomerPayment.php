@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Artur Czopek (artur.czopek@avalton.com)
- * Date: 5/23/14
- * Time: 12:15 PM
- */
 
 namespace Czopson\Authorize;
 
@@ -17,7 +11,7 @@ class CustomerPayment extends ANetPayment
     {
         parent::__construct($loginID, $transactionKey, $sandbox);
 
-        $this->customer = new Customer($loginID, $transactionKey, $sandbox);
+        $this->customer = new CustomerManager($loginID, $transactionKey, $sandbox);
         $this->customer->loadById($customerId);
     }
 

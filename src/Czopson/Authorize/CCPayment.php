@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Artur Czopek
- * Date: 5/19/14
- * Time: 3:16 PM
- */
 
 namespace Czopson\Authorize;
 
@@ -15,9 +9,16 @@ class CCPayment extends ANetPayment
 {
     private $transactionFields;
 
-    public function setTransactionDetails(CCPaymentDetails $details) {
+    public function __construct($loginID, $transactionKey, CCPaymentDetails $details, $sandbox = false, ANetAPIFactory $apiFactory = null)
+    {
+        parent::__construct($loginID, $transactionKey, $sandbox, $apiFactory);
+
+        if(null === $details) {
+            throw new \Exception('Missing CC details.');
+        }
+
         $this->transactionFields = array(
-             'card_num'=> $details->getCcNumber()
+            'card_num'=> $details->getCcNumber()
             ,'card_code'=>$details->getCcCode()
             ,'exp_date'=>$details->getCcExpirationMonth().'/'.$details->getCcExpirationYear()
             ,'first_name' => $details->getFirstName()
@@ -29,12 +30,7 @@ class CCPayment extends ANetPayment
         );
     }
 
-
     public function validateCC($amount) {
-        if(null === $this->transactionFields) {
-            throw new \Exception('Missing CC details.');
-        }
-
         if($this->authorizeTransaction($amount)) {
             $res = $this->voidTransaction($this->getLastTransactionResponse()->transaction_id);
         } else {
@@ -44,12 +40,7 @@ class CCPayment extends ANetPayment
         return $this->transactionResult($res);
     }
 
-
     public function chargeCC($amount) {
-        if(null === $this->transactionFields) {
-            throw new \Exception('Missing CC details.');
-        }
-
         if($this->authorizeTransaction($amount)) {
             $res = $this->captureTransaction($this->getLastTransactionResponse()->transaction_id);
         } else {

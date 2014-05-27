@@ -5,7 +5,7 @@ namespace Czopson\Authorize;
 use Czopson\Authorize\Models\CCPaymentDetails;
 use PhpSpec\Exception\Exception;
 
-class Customer extends ANetObject
+class CustomerManager extends ANetObject
 {
     private $customerProfileID;
     private $paymentProfileID;
@@ -21,11 +21,9 @@ class Customer extends ANetObject
         $this->createAddressProfile($customerProfile, $details);
 
         $this->save($customerProfile);
-
-        return true;
     }
 
-    public function createCustomerProfile(CCPaymentDetails $details)
+    private function createCustomerProfile(CCPaymentDetails $details)
     {
         $customerProfile = new \AuthorizeNetCustomer;
         $customerProfile->description = $details->getFirstName() .' '. $details->getLastName();
@@ -35,7 +33,7 @@ class Customer extends ANetObject
         return $customerProfile;
     }
 
-    public function createCCPaymentProfile(\AuthorizeNetCustomer $customerProfile, CCPaymentDetails $details)
+    private function createCCPaymentProfile(\AuthorizeNetCustomer $customerProfile, CCPaymentDetails $details)
     {
         $paymentProfile = new \AuthorizeNetPaymentProfile;
         $paymentProfile->customerType = self::INDIVIDUAL_CC_PROFILE;
@@ -44,7 +42,7 @@ class Customer extends ANetObject
         $customerProfile->paymentProfiles[] = $paymentProfile;
     }
 
-    public function createAddressProfile(\AuthorizeNetCustomer $customerProfile, CCPaymentDetails $details)
+    private function createAddressProfile(\AuthorizeNetCustomer $customerProfile, CCPaymentDetails $details)
     {
         $address = new \AuthorizeNetAddress;
         $address->firstName = $details->getFirstName();
@@ -94,7 +92,7 @@ class Customer extends ANetObject
     /**
      * @param mixed $addressProfileID
      */
-    public function setAddressProfileID($addressProfileID)
+    private function setAddressProfileID($addressProfileID)
     {
         $this->addressProfileID = $addressProfileID;
     }
@@ -110,7 +108,7 @@ class Customer extends ANetObject
     /**
      * @param mixed $customerProfileID
      */
-    public function setCustomerProfileID($customerProfileID)
+    private function setCustomerProfileID($customerProfileID)
     {
         $this->customerProfileID = $customerProfileID;
     }
@@ -126,7 +124,7 @@ class Customer extends ANetObject
     /**
      * @param mixed $paymentProfileID
      */
-    public function setPaymentProfileID($paymentProfileID)
+    private function setPaymentProfileID($paymentProfileID)
     {
         $this->paymentProfileID = $paymentProfileID;
     }

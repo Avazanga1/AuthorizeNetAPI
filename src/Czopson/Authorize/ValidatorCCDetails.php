@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Artur Czopek
- * Date: 5/19/14
- * Time: 4:09 PM
- */
 
 namespace Czopson\Authorize;
 
@@ -134,14 +128,14 @@ class ValidatorCCDetails {
 
     public function verifyCCFirstName($firstName)
     {
-        if (!preg_match('/^[a-zA-Záéíóúüñ¿¡0-9\-\'\.\,\ ]+$/', $firstName)) {
+        if (!$this->validateNameString($firstName)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong first name');
         }
     }
 
     public function verifyCCLastName($lastName)
     {
-        if (!preg_match('/^[a-zA-Záéíóúüñ¿¡0-9\-\'\.\,\ ]+$/', $lastName)) {
+        if (!$this->validateNameString($lastName)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong last name');
         }
     }
@@ -193,5 +187,14 @@ class ValidatorCCDetails {
         if (!preg_match('/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/', $email)) {
             throw new Exceptions\IncorrectCCDetailsException('Wrong email address');
         }
+    }
+
+    private function validateNameString($name)
+    {
+        if (!preg_match('/^[a-zA-Záéíóúüñ¿¡0-9\-\'\.\,\ ]+$/', $name)) {
+            return false;
+        }
+
+        return true;
     }
 } 
