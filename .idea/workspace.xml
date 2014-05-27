@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="00b6c685-e6d6-438f-bcb2-35dfa4916192" name="Default" comment="">
-      <change type="DELETED" beforePath="D:\Workspace\AuthorizeNetAPI\spec\Czopson\Authorize\CustomerSpec.php" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/ANetAPIFactory.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/ANetAPIFactory.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/ANetAPIProductionFactory.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/ANetAPIProductionFactory.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/ANetObject.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/ANetObject.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/ANetPayment.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/ANetPayment.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/CCPayment.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/CCPayment.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/CustomerPayment.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/CustomerPayment.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/Exceptions/IncorrectCCDetailsException.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/Exceptions/IncorrectCCDetailsException.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/Exceptions/MissingCCDetailsException.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/Exceptions/MissingCCDetailsException.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Czopson/Authorize/ValidatorCCDetails.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/ValidatorCCDetails.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/example.php" afterPath="$PROJECT_DIR$/src/example.php" />
-      <change type="MOVED" beforePath="D:\Workspace\AuthorizeNetAPI\src\Czopson\Authorize\Customer.php" afterPath="$PROJECT_DIR$/src/Czopson/Authorize/CustomerManager.php" />
     </list>
     <ignored path="AuthorizeNetAPI.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,19 +25,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="example.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="example.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/example.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="37" selection-start="387" selection-end="387" vertical-scroll-proportion="0.23224044" vertical-offset="102" max-vertical-offset="1564">
+            <state line="11" column="37" selection-start="387" selection-end="387" vertical-scroll-proportion="-1.6666666" vertical-offset="102" max-vertical-offset="1564">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CCPayment.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="CCPayment.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Czopson/Authorize/CCPayment.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="0" selection-start="157" selection-end="157" vertical-scroll-proportion="-5.3461537" vertical-offset="48" max-vertical-offset="1581">
+            <state line="13" column="31" selection-start="380" selection-end="380" vertical-scroll-proportion="0.4347826" vertical-offset="51" max-vertical-offset="1547">
               <folding />
             </state>
           </provider>
@@ -88,7 +77,6 @@
         <option value="$PROJECT_DIR$/src/Czopson/Authorize/AuthorizeNetObject.php" />
         <option value="$PROJECT_DIR$/src/Czopson/Authorize/AuthorizeNetPayment.php" />
         <option value="$PROJECT_DIR$/src/Czopson/Authorize/CCDetailsValidator.php" />
-        <option value="$PROJECT_DIR$/src/Czopson/Authorize/CCPayment.php" />
         <option value="$PROJECT_DIR$/src/Czopson/Authorize/Exceptions/IncorrectCCDetailsException.php" />
         <option value="$PROJECT_DIR$/src/Czopson/Authorize/Exceptions/MissingCCDetailsException.php" />
         <option value="$PROJECT_DIR$/src/Czopson/Authorize/ANetAPIFactory.php" />
@@ -99,6 +87,7 @@
         <option value="$PROJECT_DIR$/src/Czopson/Authorize/Customer.php" />
         <option value="$PROJECT_DIR$/src/Czopson/Authorize/CustomerPayment.php" />
         <option value="$PROJECT_DIR$/src/example.php" />
+        <option value="$PROJECT_DIR$/src/Czopson/Authorize/CCPayment.php" />
       </list>
     </option>
   </component>
@@ -644,16 +633,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Czopson/Authorize/CCPayment.php">
+    <entry file="file://$PROJECT_DIR$/src/example.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="157" selection-end="157" vertical-scroll-proportion="-5.3461537" vertical-offset="48" max-vertical-offset="1581">
+        <state line="11" column="37" selection-start="387" selection-end="387" vertical-scroll-proportion="-1.6666666" vertical-offset="102" max-vertical-offset="1564">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/example.php">
+    <entry file="file://$PROJECT_DIR$/src/Czopson/Authorize/CCPayment.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="37" selection-start="387" selection-end="387" vertical-scroll-proportion="0.23224044" vertical-offset="102" max-vertical-offset="1564">
+        <state line="13" column="31" selection-start="380" selection-end="380" vertical-scroll-proportion="0.4347826" vertical-offset="51" max-vertical-offset="1547">
           <folding />
         </state>
       </provider>

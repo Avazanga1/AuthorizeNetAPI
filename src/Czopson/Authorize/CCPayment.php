@@ -7,8 +7,6 @@ use Czopson\Authorize\Models\CCPaymentDetails;
 
 class CCPayment extends ANetPayment
 {
-    private $transactionFields;
-
     public function __construct($loginID, $transactionKey, CCPaymentDetails $details, $sandbox = false, ANetAPIFactory $apiFactory = null)
     {
         parent::__construct($loginID, $transactionKey, $sandbox, $apiFactory);
